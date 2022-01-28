@@ -177,13 +177,14 @@ class PyTracer:
                 self.last_line = frame.f_lineno
         elif event == 'line':
             # Record an executed line.
-            if self.cur_file_data is not None:
+            cur_file_data = self.data.get(frame.f_code.co_filename, None)
+            if cur_file_data is not None:
                 lineno = frame.f_lineno
 
                 if self.trace_arcs:
-                    self.cur_file_data.add((self.last_line, lineno))
+                    cur_file_data.add((self.last_line, lineno))
                 else:
-                    self.cur_file_data.add(lineno)
+                    cur_file_data.add(lineno)
                 self.last_line = lineno
         elif event == 'return':
             if self.trace_arcs and self.cur_file_data:
