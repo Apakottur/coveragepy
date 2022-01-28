@@ -877,6 +877,9 @@ class CoverageData(SimpleReprMixin):
         if self.has_arcs():
             arcs = self.arcs(filename)
             if arcs is not None:
+                for a, b in arcs:
+                    if a is None or b is None:
+                        raise Exception(f"filename {filename!r} has {(a, b)}")
                 all_lines = itertools.chain.from_iterable(arcs)
                 return list({l for l in all_lines if l > 0})
 
